@@ -100,7 +100,7 @@ while m < 10000:
         print(m)
         #clear_output(wait=True)
 
-    with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/psychiatry/' + str(
+    with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/psychiatry/failed_urls' + str(
             q) + '.json', 'w', encoding='utf-8') as f:
         json.dump(failed_urls, f, ensure_ascii=False, indent=4)
     q = q + 1
