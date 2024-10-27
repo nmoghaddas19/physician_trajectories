@@ -6,10 +6,10 @@ import random
 import csv
 
 next_page_urls = []
-html = requests.get('https://www.doximity.com/directory/md/specialty/cardiology').text
+html = requests.get('https://www.doximity.com/directory/md/specialty/psychiatry').text
 m = -1
 q = 0
-while m < 6548:
+while m < 10000:
     soup_master = BeautifulSoup(html)
     soup_div = soup_master.find('ul', class_='list-4-col')
 
@@ -23,7 +23,7 @@ while m < 6548:
         dict_doctor = {}
         doctor_id = m
 
-        #time.sleep(random.uniform(0.5, 5))
+        time.sleep(random.uniform(0.5, 5))
         full_url = 'https://www.doximity.com' + doctor_hrefs[i]
         html = requests.get(full_url).text
         soup = BeautifulSoup(html)
@@ -93,14 +93,14 @@ while m < 6548:
             dict_doctor[html] = html
             failed_urls[doctor_id] = full_url
 
-        with open('/Users/nima/PycharmProjects/PhD/NETS 5116 project/data/card/cardiology12' + str(
+        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/psychiatry/' + str(
                 doctor_id) + '.json', 'w', encoding='utf-8') as f:
             json.dump(dict_doctor, f, ensure_ascii=False, indent=4)
 
         print(m)
         #clear_output(wait=True)
 
-    with open('/Users/nima/PycharmProjects/PhD/NETS 5116 project/data/cardiology12' + str(
+    with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/psychiatry/' + str(
             q) + '.json', 'w', encoding='utf-8') as f:
         json.dump(failed_urls, f, ensure_ascii=False, indent=4)
     q = q + 1
@@ -116,7 +116,7 @@ while m < 6548:
 
 #print(next_page_urls)
 
-with open('/Users/nima/PycharmProjects/PhD/NETS 5116 project/data/card/cardiology12/next_page_urls.csv', 'w',
+with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/psychiatry/next_page_urls.csv', 'w',
           newline='') as file:
     writer = csv.writer(file)
     # Write a header row if needed
