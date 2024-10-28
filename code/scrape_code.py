@@ -6,10 +6,10 @@ import random
 import csv
 
 next_page_urls = []
-html = requests.get('https://www.doximity.com/directory/md/specialty/ophthalmology').text
-m = -1
-q = 0
-while m < 20000:
+html = requests.get('https://www.doximity.com/directory/md/specialty/ophthalmology?after=pub%2Fjacquelyn-o-banion-md').text
+m = 9909
+q = 198
+while m < 25000:
     soup_master = BeautifulSoup(html)
     soup_div = soup_master.find('ul', class_='list-4-col')
 
