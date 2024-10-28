@@ -53,17 +53,19 @@ while m < 10000:
             office = office_html.get_text() if office_html else None
 
             hosp_aff = soup.find('section', class_='hospital-info')
+            hospitals_list = []
             if hosp_aff:
                 hospitals = hosp_aff.find_all('span', class_='black', itemprop='name')
-                hospitals_list = []
+                
                 for line in hospitals:
                     hospitals_list.append(line.string)
 
             awards_section = soup.find('section', class_='award-info')
+            awards_list = []
             if awards_section:
                 awards = awards_section.find_all('li', class_='show_more_hidden')
                 # awarding_inst = awards_section.find_all('span', class_ = 'br')
-                awards_list = []
+                
                 for line in awards:
                     awards_list.append(line.get_text())
 
