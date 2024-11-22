@@ -5,11 +5,11 @@ import json
 import random
 import csv
 
-#next_page_urls = []
-html = requests.get('https://www.doximity.com/directory/md/specialty/ophthalmology?after=pub%2Fwalter-cukrowski-md-50f1').text
-m = 25009
-q = 500
-while m < 30000:
+next_page_urls = []
+html = requests.get('https://www.doximity.com/directory/md/specialty/medical-genetics', headers={"User-Agent": "XW"}).text
+m = -1
+q = 0
+while m < 60000:
     soup_master = BeautifulSoup(html)
     soup_div = soup_master.find('ul', class_='list-4-col')
 
@@ -23,9 +23,9 @@ while m < 30000:
         dict_doctor = {}
         doctor_id = m
 
-        time.sleep(random.uniform(0.5, 3))
+        time.sleep(random.uniform(1, 5))
         full_url = 'https://www.doximity.com' + doctor_hrefs[i]
-        html = requests.get(full_url).text
+        html = requests.get(full_url, headers={"User-Agent": "XY"}).text
         soup = BeautifulSoup(html)
 
         try:
@@ -95,37 +95,38 @@ while m < 30000:
             dict_doctor[html] = html
             failed_urls[doctor_id] = full_url
 
-        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/ophthalmology/' + str(
+        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/medical_genetics/' + str(
                 doctor_id) + '.json', 'w', encoding='utf-8') as f:
             json.dump(dict_doctor, f, ensure_ascii=False, indent=4)
 
         print(m)
         #clear_output(wait=True)
 
-    with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/ophthalmology/failed_urls' + str(
-            q) + '.json', 'w', encoding='utf-8') as f:
-        json.dump(failed_urls, f, ensure_ascii=False, indent=4)
     q = q + 1
-
-    if soup_master.find('a', class_='next_page'):
-        next_href = soup_master.find('a', class_='next_page').get('href')
+    with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/medical_genetics/failed_urls'+str(q)+'.json', 'w', encoding='utf-8') as f:
+        json.dump(failed_urls, f, ensure_ascii=False, indent=4)
+    
+    if soup_master.find('a', class_ = 'next_page'):
+        next_href = soup_master.find('a', class_ = 'next_page').get('href')
         next_url = 'https://www.doximity.com' + next_href
-        next_page_urls.append(next_url)
-        html = requests.get(next_url).text
-    else:
-        print('end reached')
-        break
+        #next_page_urls.append(next_url)
+        html = requests.get(next_url, headers={"User-Agent": "XY"}#, proxies=proxies
+                            ).text
+        next_url_dict = {}
+        next_url_dict[doctor_id] = next_url
+        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/medical_genetics/next_url'+str(q)+'.json', 'w', encoding='utf-8') as f:
+            json.dump(next_url_dict, f, ensure_ascii=False, indent=4)
 
 #print(next_page_urls)
 
-with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/ophthalmology/next_page_urls.csv', 'w',
-          newline='') as file:
-    writer = csv.writer(file)
-    # Write a header row if needed
-    writer.writerow(["url"])
-    # Write each string as a row
-    for row in next_page_urls:
-        writer.writerow([row])
+# with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/medical_genetics/next_page_urls.csv', 'w',
+#           newline='') as file:
+#     writer = csv.writer(file)
+#     # Write a header row if needed
+#     writer.writerow(["url"])
+#     # Write each string as a row
+#     for row in next_page_urls:
+#         writer.writerow([row])
 
 
 # import socket
@@ -135,4 +136,4 @@ with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/ophthal
 #
 # print("Your Computer Name is: " + hostname)
 # print("Your Computer IP Address is: " + IPAddr)
-# next_page_urls
+# next_page_urls[-1]
