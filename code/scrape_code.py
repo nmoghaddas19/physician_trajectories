@@ -1,3 +1,7 @@
+# import sys
+# print("Python Executable:", sys.executable)
+
+
 from bs4 import BeautifulSoup
 import requests
 import time
@@ -6,10 +10,10 @@ import random
 import csv
 
 next_page_urls = []
-html = requests.get('https://www.doximity.com/directory/md/specialty/medical-genetics', headers={"User-Agent": "XW"}).text
-m = -1
-q = 0
-while m < 60000:
+html = requests.get('https://www.doximity.com/directory/md/specialty/pediatrics?after=pub%2Fcarissa-lee-holmes-md', headers={"User-Agent": "XW"}).text
+m = 11799
+q = 235
+while m < 90000:
     soup_master = BeautifulSoup(html)
     soup_div = soup_master.find('ul', class_='list-4-col')
 
@@ -23,7 +27,7 @@ while m < 60000:
         dict_doctor = {}
         doctor_id = m
 
-        time.sleep(random.uniform(1, 5))
+        time.sleep(random.uniform(0.5, 4))
         full_url = 'https://www.doximity.com' + doctor_hrefs[i]
         html = requests.get(full_url, headers={"User-Agent": "XY"}).text
         soup = BeautifulSoup(html)
@@ -95,7 +99,7 @@ while m < 60000:
             dict_doctor[html] = html
             failed_urls[doctor_id] = full_url
 
-        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/medical_genetics/' + str(
+        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/pediatrics/' + str(
                 doctor_id) + '.json', 'w', encoding='utf-8') as f:
             json.dump(dict_doctor, f, ensure_ascii=False, indent=4)
 
@@ -103,7 +107,7 @@ while m < 60000:
         #clear_output(wait=True)
 
     q = q + 1
-    with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/medical_genetics/failed_urls'+str(q)+'.json', 'w', encoding='utf-8') as f:
+    with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/pediatrics/failed_urls'+str(q)+'.json', 'w', encoding='utf-8') as f:
         json.dump(failed_urls, f, ensure_ascii=False, indent=4)
     
     if soup_master.find('a', class_ = 'next_page'):
@@ -114,8 +118,11 @@ while m < 60000:
                             ).text
         next_url_dict = {}
         next_url_dict[doctor_id] = next_url
-        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/medical_genetics/next_url'+str(q)+'.json', 'w', encoding='utf-8') as f:
+        with open('/Users/nima/Desktop/PhD/NETS 5116/physician_trajectories/data/pediatrics/next_url'+str(q)+'.json', 'w', encoding='utf-8') as f:
             json.dump(next_url_dict, f, ensure_ascii=False, indent=4)
+    else:
+        print('No more pages')
+        break
 
 #print(next_page_urls)
 
@@ -137,3 +144,4 @@ while m < 60000:
 # print("Your Computer Name is: " + hostname)
 # print("Your Computer IP Address is: " + IPAddr)
 # next_page_urls[-1]
+
