@@ -10,9 +10,9 @@ import random
 import csv
 
 next_page_urls = []
-html = requests.get('https://www.doximity.com/directory/md/specialty/pediatrics?after=pub%2Fcarissa-lee-holmes-md', headers={"User-Agent": "XW"}).text
-m = 11799
-q = 235
+html = requests.get('https://www.doximity.com/directory/md/specialty/pediatrics?after=pub%2Fwilliam-silverman-md-b7e6', headers={"User-Agent": "XW"}).text
+m = 80199
+q = 1603
 while m < 90000:
     soup_master = BeautifulSoup(html)
     soup_div = soup_master.find('ul', class_='list-4-col')
@@ -27,12 +27,12 @@ while m < 90000:
         dict_doctor = {}
         doctor_id = m
 
-        time.sleep(random.uniform(0.5, 4))
+        time.sleep(random.uniform(1, 5))
         full_url = 'https://www.doximity.com' + doctor_hrefs[i]
         html = requests.get(full_url, headers={"User-Agent": "XY"}).text
         soup = BeautifulSoup(html)
 
-        try:
+        try: 
             first_name_html = soup.find('span', class_='user-name-first')
             first_name = first_name_html.get_text() if first_name_html else None
 
